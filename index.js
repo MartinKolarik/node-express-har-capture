@@ -129,7 +129,7 @@ module.exports = function harCaptureMiddlewareSetup(options) {
 
 
             // Write the data out
-            fs.writeFile(
+            fs.writeFileSync(
                 path.join(harOutputDir, Date.now().toString() + '-' + outputName + '.har'),
                 JSON.stringify(data, undefined, 2)
             );
