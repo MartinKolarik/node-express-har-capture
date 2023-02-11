@@ -106,7 +106,7 @@ module.exports = function harCaptureMiddlewareSetup(options) {
                 });
             });
             // Query strings
-            Object.keys(req.query).forEach(function (queryName) {
+            Object.keys(req.query || {}).forEach(function (queryName) {
                 data.log.entries[0].request.queryString.push({
                     name: queryName,
                     value: req.query[queryName]
