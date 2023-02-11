@@ -26,6 +26,7 @@ module.exports = function harCaptureMiddlewareSetup(options) {
             outputName = mapRequestToName(req);
 
         // Shadow the 'end' request
+	    var query = [ ...new URLSearchParams(new URL(req.url, 'http://localhost').search) ].map(([ name, value ]) => ({ name, value }));
         var end = res.end;
         res.end = function () {
             var endTime = Date.now(),
@@ -60,17 +61,17 @@ module.exports = function harCaptureMiddlewareSetup(options) {
                         time: deltaTime,
                         request: {
                             method: req.method,
-                            url: req.originalUrl,
+                            url: new URL(req.url, 'http://localhost').pathname,
                             httpVersion: 'HTTP/' + req.httpVersion,
                             headersSize: 0, // Filled out later
                             headers: [], // Filled out later
-                            queryString: [], // TODO
+                            queryString: query, // TODO
                             cookies: [], // TODO
                             bodySize: req.client.bytesRead // TODO
                         },
                         response: {
                             status: res.statusCode,
-                            redirectURL: req.originalUrl,
+                            redirectURL: req.originalUrl || new URL(req.url, 'http://localhost').pathname,
                             httpVersion: 'HTTP/' + req.httpVersion, // TODO
                             headersSize: -1,
                             statusText: 'OK', // TODO
